@@ -236,8 +236,7 @@ def linear_staple_nick_s_shape_scaffold_center(staple_domain, scaffold_domain, s
                     continue
             if sc_general.is_in_outline(staple_domain, helix, offset) and sc_general.is_in_outline(staple_domain, helix, offset + 1) and sc_general.is_in_outline(staple_domain, helix, offset - 1):
                 nicks_on_line.append(offset)
-        for nick in nicks_on_line:
-            print(type(nick))
+
         if nicks_on_line == []:
             nick_locations.append('no nicks')
         else:
