@@ -90,5 +90,8 @@ def add_staple_nicks(design: sc.Design, nick_locations):
     """Adds nicks ot the precursor staple strands"""
     for helix in range(len(nick_locations)):
         forward = sc_general.forward_strand(helix, 'staple')
-        for nick in nick_locations[helix]:
-            design.add_nick(helix = helix, offset = nick, forward = forward)
+        if nick_locations[helix] == 'no nicks':
+            continue
+        else:
+            for nick in nick_locations[helix]:
+                    design.add_nick(helix = helix, offset = nick, forward = forward)
