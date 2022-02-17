@@ -17,8 +17,6 @@ Then make the lattice domain for the shape (and the hairpin lattice etc . . .)
 
 Then use the functions in the sc.pattern module to find all the nick and crossover locations.
 
-Finally use the sc.create function to create the initial design, precursor scaffold, scaffold nicks, scaffold crossovers, precursor staples, staple nicks, and staple crossovers.
+Finally use the sc.create functions to create the initial design, precursor scaffold, scaffold nicks, scaffold crossovers, precursor staples, staple nicks, and staple crossovers.
 
-The p768_square seed, fringe, and adaptor files are provided as an example.
-
-***make sure to change the path directory in the sys.path.append() so modules get imported into your design script.***
+The seed_design_maker is provided as an example, and as a shortcut to make any size seed.
