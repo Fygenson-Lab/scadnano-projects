@@ -49,15 +49,16 @@ scaffold_crossovers = sc_pattern.linear_scaffold_crossovers(outline, seems)
 staple_crossovers = sc_pattern.seed_crossever_locations(staple_outline, outline, seems, 'square')
 sca_seq = sc_general.sequence(sequence_name, 0, seed_legnth * 12)
 
-desgin = sc_create.create_helices(outline, lattice, 'square') #create scadnano design object with helices
-sc_create.add_precursor_scaffolds(desgin, outline) #add scaffold
-sc_create.add_scaffold_nicks(desgin, seems) #add scaffold nicks
-sc_create.add_crossovers(desgin, scaffold_crossovers, 'scaffold') #add scaffold crossovers
-desgin.strands[0].set_scaffold() #set this strand as the scaffolds
-sc_create.add_precursor_staples(desgin, staple_outline) #add staple strands
-sc_create.add_staple_nicks(desgin, staple_nicks) #add staple nicks
-sc_create.add_crossovers(desgin, staple_crossovers, 'staple') #add staple crossovers
-desgin.assign_dna(desgin.strands[0], sequence = sca_seq) #assign scaffold sequence
+design = sc_create.create_helices(outline, lattice, 'square') #create scadnano design object with helices
+sc_create.add_precursor_scaffolds(design, outline) #add scaffold
+sc_create.add_scaffold_nicks(design, seems) #add scaffold nicks
+sc_create.add_crossovers(design, scaffold_crossovers, 'scaffold') #add scaffold crossovers
+design.strands[0].set_scaffold() #set this strand as the scaffolds
+sc_create.add_precursor_staples(design, staple_outline) #add staple strands
+sc_create.add_staple_nicks(design, staple_nicks) #add staple nicks
+sc_create.add_crossovers(design, staple_crossovers, 'staple') #add staple crossovers
+design.assign_dna(design.strands[0], sequence = sca_seq) #assign scaffold sequence
+sc_general.name_staples(design) #rename the staple strands
 
-desgin.write_scadnano_file() #create scadnano file
+design.write_scadnano_file() #create scadnano file
 os.rename('seed_design_maker.sc', '{}.sc'.format(design_name)) #rename file to the design name

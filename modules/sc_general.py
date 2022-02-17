@@ -14,6 +14,26 @@ def sequence(seq_name, start, end):
     
     return seq[start:end]
 
+def name_staples(design):
+    '''Given a completed design object, names the staples with following convention:
+    helix_index
+    index numbered starting at 0 on the left (reverse) side of the seed to the right (forward)'''
+
+    max_helix = None
+    stp_on_helix_count = 0
+    for strand in design.strands:
+        if not strand.is_scaffold:
+            helix = strand.domains[1].helix
+            if helix == max_helix:
+                index = stp_on_helix_count + 1
+                stp_on_helix_count += 1
+            else:
+                index = 0
+            max_helix = helix
+            strand.set_name('stp{}_{}'.format(helix, index))
+
+    return design
+
 def is_in_outline(shape_outline, helix, position):
     """Given the shape outline, a helix number, and position, rutures True or False if that position exists in the outline"""
     outline = shape_outline[helix]
