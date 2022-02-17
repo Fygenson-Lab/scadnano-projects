@@ -44,16 +44,16 @@ seems = [] #seam locations, none for the s-shaped seed
 for _ in range(12): seems.append('no seam')
 
 #find the staple nick and crossover locations, and scaffold sequence
-staple_nicks = sc_pattern.linear_staple_nick_s_shape(staple_outline, seems, 'square')
+staple_nicks = sc_pattern.linear_staple_nick_s_shape_scaffold_center(staple_outline, outline, seems, 'square')
 scaffold_crossovers = sc_pattern.linear_scaffold_crossovers(outline, seems)
-staple_crossovers = sc_pattern.linear_staple_crossovers_s_shape_loop_around(staple_outline, seems, 'square')
+staple_crossovers = sc_pattern.linear_staple_crossovers_s_shape_loop_around_scaffold_center(staple_outline, outline, seems, 'square')
 sca_seq = sc_general.sequence(sequence_name, 0, seed_legnth * 12)
 
 desgin = sc_create.create_helices(outline, lattice, 'square') #create scadnano design object with helices
 sc_create.add_precursor_scaffolds(desgin, outline) #add scaffold
 sc_create.add_scaffold_nicks(desgin, seems) #add scaffold nicks
 sc_create.add_crossovers(desgin, scaffold_crossovers, 'scaffold') #add scaffold crossovers
-desgin.strands[0].set_scaffold() #set this strand as the scaffold
+desgin.strands[0].set_scaffold() #set this strand as the scaffolds
 sc_create.add_precursor_staples(desgin, staple_outline) #add staple strands
 sc_create.add_staple_nicks(desgin, staple_nicks) #add staple nicks
 sc_create.add_crossovers(desgin, staple_crossovers, 'staple') #add staple crossovers

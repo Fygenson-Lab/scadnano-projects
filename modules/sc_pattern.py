@@ -202,6 +202,49 @@ def linear_staple_nick_s_shape(staple_domain, seam_locations, grid_type):
 
     return nick_locations
 
+def linear_staple_nick_s_shape_scaffold_center(staple_domain, scaffold_domain, seam_locations, grid_type):
+    """Given the shape outline, and the seam locations, returns a list of staple nicks for s shaped staples with no nicks at the pattern center (pattern center defined by scaffold center)"""
+    nick_locations = []
+    max_offset = sc_general.find_max(staple_domain)
+    if grid_type == 'square':
+        multiple = 8
+    else:
+        multiple = 7
+
+    for helix in range(len(staple_domain)):
+        nicks_on_line = []
+        center = sc_general.find_pattern_center(seam_locations, helix, scaffold_domain)
+
+        #Right Side of the seam
+        for offset in range(center, max_offset, multiple):
+            if helix % 2 == 0:
+                if (offset - center - (3 * multiple)) % (4 * multiple) == 0:
+                    continue
+            elif helix % 2 == 1:
+                if (offset - center - multiple) % (4 * multiple) == 0:
+                    continue
+            if sc_general.is_in_outline(staple_domain, helix, offset) and sc_general.is_in_outline(staple_domain, helix, offset + 1) and sc_general.is_in_outline(staple_domain, helix, offset - 1):
+                nicks_on_line.append(offset)
+
+        #Left side of seam
+        for offset in range(center - multiple, 0, - multiple):
+            if helix % 2 == 0:
+                if (offset + center - (3 * multiple)) % (4 * multiple) == 0:
+                    continue
+            elif helix % 2 == 1:
+                if (offset + center - multiple) % (4 * multiple) == 0:
+                    continue
+            if sc_general.is_in_outline(staple_domain, helix, offset) and sc_general.is_in_outline(staple_domain, helix, offset + 1) and sc_general.is_in_outline(staple_domain, helix, offset - 1):
+                nicks_on_line.append(offset)
+        for nick in nicks_on_line:
+            print(type(nick))
+        if nicks_on_line == []:
+            nick_locations.append('no nicks')
+        else:
+            nick_locations.append(nicks_on_line)
+
+    return nick_locations
+
 def staple_crossovers_s_shape_loop_around_no_seam(staple_domain, seam_locations, grid_type):
     """Given the shape outline and seam location, returns a list of staple crossover locations for s shape staples which loop around to form a circluar shape"""
     crossovers = []
@@ -279,7 +322,43 @@ def linear_staple_crossovers_s_shape_loop_around(staple_domain, seam_locations, 
                 crossovers_on_line.append((helix, helix2, i - 1, i - 1))
             else:
                 continue
-        
+        crossovers.append(crossovers_on_line)
+    
+    return crossovers
+
+def linear_staple_crossovers_s_shape_loop_around_scaffold_center(staple_domain, scaffold_domain, seam_locations, grid_type):
+    """Given the shape outline and seam location, returns a list of staple crossover locations for s shape staples which loop around to form a circluar shape, using the scaffold to define pattern center"""
+    crossovers = []
+    if grid_type == 'square':
+        multiple = 8
+    else:
+        multiple = 7
+    for helix in range(len(staple_domain)):
+        if helix + 1 == len(staple_domain):
+            helix2 = 0
+        else:
+            helix2 = helix + 1
+        crossovers_on_line = []
+        center = sc_general.find_pattern_center(seam_locations, helix, scaffold_domain)
+        max_offset = sc_general.find_max(staple_domain) + 1
+
+        if helix % 2 == 1:
+            right_side_offsets = list(range(center, max_offset, (4 * multiple)))
+            left_side_offsets = list(range(center - (4 * multiple), -1, -(4 * multiple)))
+        elif helix % 2 == 0:
+            right_side_offsets = list(range(center + (2 * multiple), max_offset, (4 * multiple)))
+            left_side_offsets = list(range(center - (2 * multiple), -1, -(4 * multiple)))  
+
+        possible_offsets = left_side_offsets + right_side_offsets
+
+        for i in possible_offsets:
+            if sc_general.is_in_outline(staple_domain, helix, i) and sc_general.is_in_outline(staple_domain, helix2, i):
+                crossovers_on_line.append((helix, helix2, i, i))
+            if sc_general.is_in_outline(staple_domain, helix, i - 1) and sc_general.is_in_outline(staple_domain, helix2, i - 1):
+                crossovers_on_line.append((helix, helix2, i - 1, i - 1))
+            else:
+                continue
+
         crossovers.append(crossovers_on_line)
     
     return crossovers
