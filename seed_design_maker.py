@@ -1,4 +1,4 @@
-import sys
+import sys, os
 sys.path.append('.../')
 from modules import sc_general
 from modules import sc_pattern
@@ -24,7 +24,7 @@ sidedness = None
 while type(sidedness) != int:
     try:
         sidedness = int(input('Is this a one-sided or two-sided seed?(1 or 2): '))
-        if sidedness != (1 or 2):
+        if not(sidedness == 1 or sidedness == 2):
             sidedness = None
             print('Please input sided-ness as "1" or "2"')
     except:
@@ -60,3 +60,4 @@ sc_create.add_crossovers(desgin, staple_crossovers, 'staple') #add staple crosso
 desgin.assign_dna(desgin.strands[0], sequence = sca_seq) #assign scaffold sequence
 
 desgin.write_scadnano_file() #create scadnano file
+os.rename('seed_design_maker.sc', '{}.sc'.format(design_name)) #rename file to the design name
