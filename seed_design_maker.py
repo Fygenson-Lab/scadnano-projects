@@ -1,8 +1,9 @@
-import sys, os
+import sys, os, pandas
 sys.path.append('.../')
 from modules import sc_general
 from modules import sc_pattern
 from modules import sc_create
+from modules import sequences
 
 #This script assumes a 12 helix seed, with no empty regions, and a linear S shaped scaffold, on a square lattice (8 bp multiples)
 
@@ -29,6 +30,8 @@ while type(sidedness) != int:
             print('Please input sided-ness as "1" or "2"')
     except:
         print('Please input sided-ness as "1" or "2"')
+
+print('Generating seed design file...')
 
 lattice = [] #helice lattice to place strands on
 for i in range(12): lattice.append((0, i))
@@ -62,3 +65,22 @@ sc_general.name_staples(design) #rename the staple strands
 
 design.write_scadnano_file() #create scadnano file
 os.rename('seed_design_maker.sc', '{}.sc'.format(design_name)) #rename file to the design name
+
+print('Scadnano design file generated.')
+
+gen_short_hp_seq = None
+while type(gen_short_hp_seq) != bool:
+    a = input('Do you want to export staple sequences with short hairpins? (y/n): ')
+    if a == 'y':
+        gen_short_hp_seq = True
+    elif a == 'n': 
+        gen_short_hp_seq = False
+    else:
+        print('Please input either "y" or "n"')
+
+if gen_short_hp_seq:
+    short_hp_seq = sequences.generate_hairpin_stp(design)
+
+    df = pandas.DataFrame(data = short_hp_seq, index = ['Sequences'])
+    df = (df.T)
+    df.to_excel('{} staple sequences.xlsx')

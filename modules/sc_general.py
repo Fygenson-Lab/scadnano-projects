@@ -23,13 +23,14 @@ def name_staples(design):
     stp_on_helix_count = 0
     for strand in design.strands:
         if not strand.is_scaffold:
-            helix = strand.domains[1].helix
-            if helix == max_helix:
-                index = stp_on_helix_count + 1
-                stp_on_helix_count += 1
-            else:
+            helix = strand.domains[1].helix #helix of stp defined as helix staple is centered on, ie the second domain of the strand (this assumes s shape stps)
+            if helix == max_helix: #if the staple is on the same helix as the last
+                index = stp_on_helix_count + 1 #index is 1 + the last index
+                stp_on_helix_count += 1 #update the last index
+            else: #if this is the first stp on the helix
                 index = 0
-            max_helix = helix
+                stp_on_helix_count = 0 #reset the index count
+            max_helix = helix #update highest helix
             strand.set_name('stp{}_{}'.format(helix, index))
 
     return design
