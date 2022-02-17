@@ -44,9 +44,9 @@ seems = [] #seam locations, none for the s-shaped seed
 for _ in range(12): seems.append('no seam')
 
 #find the staple nick and crossover locations, and scaffold sequence
-staple_nicks = sc_pattern.linear_staple_nick_s_shape_scaffold_center(staple_outline, outline, seems, 'square')
+staple_nicks = sc_pattern.seed_nick_locations(staple_outline, outline, seems, 'square')
 scaffold_crossovers = sc_pattern.linear_scaffold_crossovers(outline, seems)
-staple_crossovers = sc_pattern.linear_staple_crossovers_s_shape_loop_around_scaffold_center(staple_outline, outline, seems, 'square')
+staple_crossovers = sc_pattern.seed_crossever_locations(staple_outline, outline, seems, 'square')
 sca_seq = sc_general.sequence(sequence_name, 0, seed_legnth * 12)
 
 desgin = sc_create.create_helices(outline, lattice, 'square') #create scadnano design object with helices

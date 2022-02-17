@@ -202,8 +202,8 @@ def linear_staple_nick_s_shape(staple_domain, seam_locations, grid_type):
 
     return nick_locations
 
-def linear_staple_nick_s_shape_scaffold_center(staple_domain, scaffold_domain, seam_locations, grid_type):
-    """Given the shape outline, and the seam locations, returns a list of staple nicks for s shaped staples with no nicks at the pattern center (pattern center defined by scaffold center)"""
+def seed_nick_locations(staple_domain, scaffold_domain, seam_locations, grid_type):
+    """Given the shape outline, and the seam locations, returns a list of staple nicks for s shaped staples with no nicks at the pattern center (pattern center defined by scaffold center, or if outline not divisible by 32, offset center by 8)"""
     nick_locations = []
     max_offset = sc_general.find_max(staple_domain)
     if grid_type == 'square':
@@ -214,6 +214,8 @@ def linear_staple_nick_s_shape_scaffold_center(staple_domain, scaffold_domain, s
     for helix in range(len(staple_domain)):
         nicks_on_line = []
         center = sc_general.find_pattern_center(seam_locations, helix, scaffold_domain)
+        if sc_general.find_max(scaffold_domain) % 32 != 0:
+            center -= 8
 
         #Right Side of the seam
         for offset in range(center, max_offset, multiple):
@@ -325,8 +327,9 @@ def linear_staple_crossovers_s_shape_loop_around(staple_domain, seam_locations, 
     
     return crossovers
 
-def linear_staple_crossovers_s_shape_loop_around_scaffold_center(staple_domain, scaffold_domain, seam_locations, grid_type):
-    """Given the shape outline and seam location, returns a list of staple crossover locations for s shape staples which loop around to form a circluar shape, using the scaffold to define pattern center"""
+def seed_crossever_locations(staple_domain, scaffold_domain, seam_locations, grid_type):
+    """Given the shape outline and seam location, returns a list of staple crossover locations for s shape staples which loop around to form a circluar shape, using the scaffold to define pattern center
+    offset center by 8 if seed legnth not divisible by 32"""
     crossovers = []
     if grid_type == 'square':
         multiple = 8
@@ -339,6 +342,8 @@ def linear_staple_crossovers_s_shape_loop_around_scaffold_center(staple_domain, 
             helix2 = helix + 1
         crossovers_on_line = []
         center = sc_general.find_pattern_center(seam_locations, helix, scaffold_domain)
+        if sc_general.find_max(scaffold_domain) & 32 != 0:
+            center -= 8
         max_offset = sc_general.find_max(staple_domain) + 1
 
         if helix % 2 == 1:
