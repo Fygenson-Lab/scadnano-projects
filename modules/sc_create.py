@@ -1,5 +1,7 @@
 import scadnano as sc
-import sc_general
+import sys
+sys.path.append('.../')
+from modules import sc_general
 
 def create_helices(shape_outline, lattice, hex_or_square) -> sc.Design:
     """Given the outline, complete lattice, and if the lattice is hex or square, creates the base helices without any strands"""

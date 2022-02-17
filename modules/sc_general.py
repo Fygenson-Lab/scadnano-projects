@@ -1,4 +1,18 @@
 import numpy as np
+import json
+
+def sequence(seq_name, start, end):
+    """Given a sequence name and range, returns the sequence in that range"""
+    
+    with open('modules/seq.json') as file:
+        seqs = json.load(file)
+    
+    try:
+        seq = seqs[seq_name]
+    except:
+        raise Exception("Error in sc_seq.sequence(), sequence {} has not been added to the sequence module".format(seq_name))
+    
+    return seq[start:end]
 
 def is_in_outline(shape_outline, helix, position):
     """Given the shape outline, a helix number, and position, rutures True or False if that position exists in the outline"""

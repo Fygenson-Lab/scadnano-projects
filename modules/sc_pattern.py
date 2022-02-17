@@ -1,4 +1,6 @@
-import sc_general
+import sys
+sys.path.append('.../')
+from modules import sc_general
 
 def scaffold_crossovers(shape_outline, seam_locations):
     """Given the shape_outline and seam locations, returns the list of scaffold crossovers
