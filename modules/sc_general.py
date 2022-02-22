@@ -45,19 +45,15 @@ def name_staples(design):
     helix_index
     index numbered starting at 0 on the left (reverse) side of the seed to the right (forward)'''
 
-    max_helix = None
-    stp_on_helix_count = 0
+    stp_on_helix_count = {}
     for strand in design.strands:
         if not strand.is_scaffold:
             helix = strand.domains[1].helix #helix of stp defined as helix staple is centered on, ie the second domain of the strand (this assumes s shape stps)
-            if helix == max_helix: #if the staple is on the same helix as the last
-                index = stp_on_helix_count + 1 #index is 1 + the last index
-                stp_on_helix_count += 1 #update the last index
-            else: #if this is the first stp on the helix
-                index = 0
-                stp_on_helix_count = 0 #reset the index count
-            max_helix = helix #update highest helix
-            strand.set_name('stp{}_{}'.format(helix, index))
+            if 'h{}'.format(helix) not in stp_on_helix_count.keys(): #if this is the first stp on this helix
+                stp_on_helix_count['h{}'.format(helix)] = 0
+            else:
+                stp_on_helix_count['h{}'.format(helix)] += 1
+            strand.set_name('stp{}_{}'.format(helix, stp_on_helix_count['h{}'.format(helix)]))
 
     return design
 
