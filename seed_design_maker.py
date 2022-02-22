@@ -11,25 +11,15 @@ design_name = input('Design name: ')
 
 sequence_name = input('Scaffold sequence name (make sure sequence is in seq.json): ')
 
-seed_legnth = None
-while type(seed_legnth) != int:
-    try:
-        seed_legnth = int(input('Desired Seed Legnth (in bp, must be divisible by 16): '))
-        if seed_legnth % 16 != 0:
-            seed_legnth = None
-            print('Seed legnth must be a multiple of 16')
-    except:
-        print('Please input an integer for the seed legnth')
+seed_legnth = int(sc_general.smart_input('Desired Seed Length (in bp, must be divisible by 16): ', 
+    try_tests = [lambda string : int(string)],
+    test_fail_mes = ['Please input seed legnth as an integer.'],
+    conditions = [lambda seed_legnth : seed_legnth % 16 == 0],
+    condition_fail_mes = ['Seed length must be a multiple of 16.']))
 
-sidedness = None
-while type(sidedness) != int:
-    try:
-        sidedness = int(input('Is this a one-sided or two-sided seed?(1 or 2): '))
-        if not(sidedness == 1 or sidedness == 2):
-            sidedness = None
-            print('Please input sided-ness as "1" or "2"')
-    except:
-        print('Please input sided-ness as "1" or "2"')
+sidedness = sc_general.smart_input('Is this a one-sided or two-sided seed? (1 or 2): ',
+    conditions = [lambda sidedness : sidedness == 1 or sidedness == 2],
+    condition_fail_mes = ['Please input sidedness as "1" or "2"'])
 
 print('Generating seed design file...')
 
@@ -68,17 +58,11 @@ os.rename('seed_design_maker.sc', '{}.sc'.format(design_name)) #rename file to t
 
 print('Scadnano design file generated.')
 
-gen_short_hp_seq = None
-while type(gen_short_hp_seq) != bool:
-    a = input('Do you want to export staple sequences with short hairpins? (y/n): ')
-    if a == 'y':
-        gen_short_hp_seq = True
-    elif a == 'n': 
-        gen_short_hp_seq = False
-    else:
-        print('Please input either "y" or "n"')
+gen_short_hp_seq = sc_general.smart_input('Do you want to export staple sequences with short hairpins? (y/n): ',
+    conditions = [lambda y_n : y_n == 'y' or y_n == 'n'],
+    condition_fail_mes = ['Please input either "y" or "n"'])
 
-if gen_short_hp_seq:
+if gen_short_hp_seq == 'y':
     short_hp_seq = sequences.generate_hairpin_stp(design)
 
     df = pandas.DataFrame(data = short_hp_seq, index = ['Sequences'])

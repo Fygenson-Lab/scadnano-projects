@@ -1,6 +1,32 @@
 import numpy as np
 import json
 
+def smart_input(prompt : str, try_tests : list = [], test_fail_mes : list = None, conditions : list = [], condition_fail_mes : list = None):
+    '''Prompts the user for an input
+    checks the given conditions (must be inputted as lambdas) and gives the user the gieven error message if failed
+    tries the given commands (also must be inputted as lambdas) and gives error message if failed
+    re-prompts the user for input if conditions/tests are failed, returns if passed'''
+    conditions_met = False
+    tests_passed = False
+    while (not conditions_met) or (not tests_passed):
+        given_input = input(prompt)
+        conditions_met = True
+        tests_passed = True
+
+        for j in range(len(try_tests)):
+            try:
+                try_tests[j](given_input)
+            except:
+                print(test_fail_mes[j])
+                tests_passed = False 
+        
+        for i in range(len(conditions)):
+            if not conditions[i](given_input):
+                print(condition_fail_mes[i])
+                conditions_met = False
+        
+    return given_input
+
 def sequence(seq_name, start, end):
     """Given a sequence name and range, returns the sequence in that range"""
     
