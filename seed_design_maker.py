@@ -14,12 +14,12 @@ sequence_name = input('Scaffold sequence name (make sure sequence is in seq.json
 seed_legnth = int(sc_general.smart_input('Desired Seed Length (in bp, must be divisible by 16): ', 
     try_tests = [lambda string : int(string)],
     test_fail_mes = ['Please input seed legnth as an integer.'],
-    conditions = [lambda seed_legnth : seed_legnth % 16 == 0],
+    conditions = [lambda seed_legnth : int(seed_legnth) % 16 == 0],
     condition_fail_mes = ['Seed length must be a multiple of 16.']))
 
-sidedness = sc_general.smart_input('Is this a one-sided or two-sided seed? (1 or 2): ',
-    conditions = [lambda sidedness : sidedness == 1 or sidedness == 2],
-    condition_fail_mes = ['Please input sidedness as "1" or "2"'])
+sidedness = int(sc_general.smart_input('Is this a one-sided or two-sided seed? (1 or 2): ',
+    conditions = [lambda sidedness : sidedness == "1" or sidedness == "2"],
+    condition_fail_mes = ['Please input sidedness as "1" or "2"']))
 
 print('Generating seed design file...')
 
@@ -62,9 +62,24 @@ gen_short_hp_seq = sc_general.smart_input('Do you want to export staple sequence
     conditions = [lambda y_n : y_n == 'y' or y_n == 'n'],
     condition_fail_mes = ['Please input either "y" or "n"'])
 
+gen_sticky_stp = sc_general.smart_input('Do you want to export staple sequences for sticking seeds together? (y/n): ',
+    conditions = [lambda y_n : y_n == 'y' or y_n == 'n'],
+    condition_fail_mes = ['Please input either "y" or "n"'])
+
 if gen_short_hp_seq == 'y':
     short_hp_seq = sequences.generate_hairpin_stp(design)
+else:
+    short_hp_seq = None
 
+if gen_sticky_stp == 'y':
+    sticky_seq = sequences.generate_sticky_stp(design)
+    stem_seq = sequences.generate_stem_stp(design)
+else:
+    sticky_seq, stem_seq = None
+
+seqs = {**short_hp_seq, **sticky_seq, **stem_seq}
+
+if seqs != None:
     df = pandas.DataFrame(data = short_hp_seq, index = ['Sequences'])
     df = (df.T)
-    df.to_excel('{} staple sequences.xlsx')
+    df.to_excel('{} staple sequences.xlsx'.format(design_name))
