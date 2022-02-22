@@ -73,7 +73,7 @@ gen_sticky_stp = sc_general.smart_input('Do you want to export staple sequences 
 if gen_hp_seq == 'y':
     hp_seq = sequences.generate_hairpin_stp(design)
 else:
-    hp_hp = {}
+    hp_seq = {}
 
 if gen_short_hp_seq == 'y':
     short_hp_seq = sequences.generate_hairpin_stp(design, short = 'y')

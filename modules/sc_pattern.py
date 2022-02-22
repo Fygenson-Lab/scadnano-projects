@@ -1,3 +1,4 @@
+from operator import mul
 import sys
 sys.path.append('.../')
 from modules import sc_general
@@ -216,6 +217,8 @@ def seed_nick_locations(staple_domain, scaffold_domain, seam_locations, grid_typ
         center = sc_general.find_pattern_center(seam_locations, helix, scaffold_domain)
         if sc_general.find_max(scaffold_domain) % 32 != 0:
             center -= 8
+        elif sc_general.find_max(scaffold_domain) <= 32:
+            center -= 16
 
         #Right Side of the seam
         for offset in range(center, max_offset, multiple):
@@ -344,14 +347,24 @@ def seed_crossever_locations(staple_domain, scaffold_domain, seam_locations, gri
         center = sc_general.find_pattern_center(seam_locations, helix, scaffold_domain)
         if sc_general.find_max(scaffold_domain) & 32 != 0:
             center -= 8
+        elif sc_general.find_max(scaffold_domain) <= 32:
+            center -= 16
         max_offset = sc_general.find_max(staple_domain) + 1
 
-        if helix % 2 == 1:
-            right_side_offsets = list(range(center, max_offset, (4 * multiple)))
-            left_side_offsets = list(range(center - (4 * multiple), -1, -(4 * multiple)))
-        elif helix % 2 == 0:
-            right_side_offsets = list(range(center + (2 * multiple), max_offset, (4 * multiple)))
-            left_side_offsets = list(range(center - (2 * multiple), -1, -(4 * multiple)))  
+        if sc_general.find_max(scaffold_domain) <= 32:
+            if helix % 2 == 0:
+                right_side_offsets = list(range(center - multiple, max_offset, (4 * multiple)))
+                left_side_offsets = list(range(center - (5 * multiple), -1, -(4 * multiple)))
+            elif helix % 2 == 1:
+                right_side_offsets = list(range(center + (1 * multiple), max_offset, (4 * multiple)))
+                left_side_offsets = list(range(center - (3 * multiple), -1, -(4 * multiple)))  
+        else:
+            if helix % 2 == 1:
+                right_side_offsets = list(range(center, max_offset, (4 * multiple)))
+                left_side_offsets = list(range(center - (4 * multiple), -1, -(4 * multiple)))
+            elif helix % 2 == 0:
+                right_side_offsets = list(range(center + (2 * multiple), max_offset, (4 * multiple)))
+                left_side_offsets = list(range(center - (2 * multiple), -1, -(4 * multiple)))
 
         possible_offsets = left_side_offsets + right_side_offsets
 
