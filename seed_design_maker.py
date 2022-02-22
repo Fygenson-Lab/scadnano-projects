@@ -58,6 +58,10 @@ os.rename('seed_design_maker.sc', '{}.sc'.format(design_name)) #rename file to t
 
 print('Scadnano design file generated.')
 
+gen_hp_seq = sc_general.smart_input('Do you want to export staple sequences with (normal sized) hairpins? (y/n): ',
+    conditions = [lambda y_n : y_n == 'y' or y_n == 'n'],
+    condition_fail_mes = ['Please input either "y" or "n"'])
+
 gen_short_hp_seq = sc_general.smart_input('Do you want to export staple sequences with short hairpins? (y/n): ',
     conditions = [lambda y_n : y_n == 'y' or y_n == 'n'],
     condition_fail_mes = ['Please input either "y" or "n"'])
@@ -66,20 +70,26 @@ gen_sticky_stp = sc_general.smart_input('Do you want to export staple sequences 
     conditions = [lambda y_n : y_n == 'y' or y_n == 'n'],
     condition_fail_mes = ['Please input either "y" or "n"'])
 
-if gen_short_hp_seq == 'y':
-    short_hp_seq = sequences.generate_hairpin_stp(design)
+if gen_hp_seq == 'y':
+    hp_seq = sequences.generate_hairpin_stp(design)
 else:
-    short_hp_seq = None
+    gen_hp = {}
+
+if gen_short_hp_seq == 'y':
+    short_hp_seq = sequences.generate_hairpin_stp(design, short = 'y')
+else:
+    short_hp_seq = {}
 
 if gen_sticky_stp == 'y':
     sticky_seq = sequences.generate_sticky_stp(design)
     stem_seq = sequences.generate_stem_stp(design)
 else:
-    sticky_seq, stem_seq = None
+    sticky_seq = {}
+    stem_seq = {}
 
-seqs = {**short_hp_seq, **sticky_seq, **stem_seq}
+seqs = {**hp_seq, **short_hp_seq, **sticky_seq, **stem_seq}
 
-if seqs != None:
-    df = pandas.DataFrame(data = short_hp_seq, index = ['Sequences'])
+if seqs != {}:
+    df = pandas.DataFrame(data = seqs, index = ['Sequences'])
     df = (df.T)
     df.to_excel('{} staple sequences.xlsx'.format(design_name))
