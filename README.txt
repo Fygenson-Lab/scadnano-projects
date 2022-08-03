@@ -1,4 +1,5 @@
-These modules make use of a list structure referred to a as a shape outline.
+These modules were written by Sarah Webster.
+They make use of a list structure referred to a as a shape outline.
 Shape outlines have the following format:
     [helix 0 tuple, helix 1 tuple, . . .]
     helix n tuple = (row type, [(start, end), (start, end), . . .])
