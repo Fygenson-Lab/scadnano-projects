@@ -81,8 +81,9 @@ def add_precursor_staples(design: sc.Design, staple_domain, label = None, dna_se
             line = lines[i]
             start = line[0]
             end = line[1]
-            staples = sc.Strand([sc.Domain(helix = helix, forward = forward, start = start, end = end, label = label)], dna_sequence = seq)
-            design.add_strand(staples)
+            if start != end:
+                staples = sc.Strand([sc.Domain(helix = helix, forward = forward, start = start, end = end, label = label)], dna_sequence = seq)
+                design.add_strand(staples)
 
 def add_staple_nicks(design: sc.Design, nick_locations):
     """Adds nicks ot the precursor staple strands"""
