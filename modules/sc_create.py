@@ -65,9 +65,7 @@ def add_crossovers(design: sc.Design, crossover_list, scaffold_or_staple):
                 offset2 = crossover[3]
                 forward = sc_general.forward_strand(helix, scaffold_or_staple)
                 forward2 = sc_general.forward_strand(helix2, scaffold_or_staple)
-                crossovers.append(sc.Crossover(helix = helix, helix2 = helix2, offset = offset, offset2 = offset2, forward = forward, forward2 = forward2, half = True))
-    
-    design.add_crossovers(crossovers)
+                design.add_half_crossover(helix = helix, helix2 = helix2, offset = offset, offset2 = offset2, forward = forward, forward2 = forward2)
 
 def add_precursor_staples(design: sc.Design, staple_domain, label = None, dna_seq = None):
     """Add precursor staples to the design"""
